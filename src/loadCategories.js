@@ -21,6 +21,7 @@ csv2tree(csvFile)
         .then(json => {
           if (json.status.code === 200) {
             const parentId = json.data.id
+            console.log(`${cat0Id},${parentId}`)
 
             // For each category1 create category
             const cat1Ids = Object.keys(catTree[cat0Id].children)
@@ -36,6 +37,7 @@ csv2tree(csvFile)
                 .then(json => {
                   if (json.status.code === 200) {
                     const parentId = json.data.id
+                    console.log(`${cat1Id},${parentId}`)
 
                     // For each category2 create category
                     const cat2Ids = Object.keys(cat1[cat1Id].children)
@@ -50,7 +52,8 @@ csv2tree(csvFile)
                       })
                         .then(json => {
                           if (json.status.code === 200) {
-                            // do nothing
+                            const parentId = json.data.id
+                            console.log(`${cat2Id},${parentId}`)
                           } else {
                             logger.error(json)
                           }
