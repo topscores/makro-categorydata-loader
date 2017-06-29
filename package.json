@@ -1,0 +1,19 @@
+{
+  "name": "makro-categorydata-loader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "load:categories": "babel-node src/loadCategories.js"
+  },
+  "repository": "git@github.com:topscores/makro-categorydata-loader.git",
+  "author": "Arnupharp Viratanapanu <arnupharp@larngeartech.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-stage-0": "^6.24.1",
+    "csvtojson": "^1.1.7",
+    "tracer": "^0.8.9"
+  }
+}

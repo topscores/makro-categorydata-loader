@@ -1,0 +1,1 @@
+export const MAKRO_CATEGORIES_MS = 'http://localhost:8046'
