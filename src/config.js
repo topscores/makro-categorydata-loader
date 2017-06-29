@@ -1,1 +1,1 @@
-export const MAKRO_CATEGORIES_MS = 'http://localhost:8046'
+export const MAKRO_CATEGORIES_MS = 'http://makro-category-api.dev:8046'

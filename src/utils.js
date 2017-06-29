@@ -1,4 +1,6 @@
 import csv2json from 'csvtojson'
+import 'isomorphic-fetch'
+import { MAKRO_CATEGORIES_MS } from './config'
 
 // Autogen slug from name_en
 export const autoslug = name_en => {
@@ -70,4 +72,19 @@ export const csv2tree = csvFile => {
         }
       })
   })
+}
+
+// call categories ms to create new categories
+export const createCategory = category => {
+  return fetch(`${MAKRO_CATEGORIES_MS}/categories`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    mode: 'cors',
+    body: JSON.stringify(category),
+  })
+    .then(response => response.json())
+    .catch(error => console.log(error))
 }
