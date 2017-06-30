@@ -14,7 +14,7 @@ export const autoslug = name_en => {
 }
 
 // create categories tree from csv file
-export const csv2tree = csvFile => {
+export const csv2catTree = csvFile => {
   const catTree = {}
   return new Promise((resolve, reject) => {
     csv2json({ noheader: true })

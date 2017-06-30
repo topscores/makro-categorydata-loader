@@ -1,7 +1,7 @@
-import { csv2tree, createCategory } from './utils'
+import { csv2catTree, createCategory } from './utils'
 
 // Path relative to where yarn is called
-const csvFile = './data/product-categories.csv'
+const productCatCSVFile = './data/product-categories.csv'
 
 // Recursively create category and it children categories
 const createCategoriesFromTree = (catTree, parentId = null) => {
@@ -34,7 +34,7 @@ const createCategoriesFromTree = (catTree, parentId = null) => {
 }
 
 console.log('Start loading categories')
-csv2tree(csvFile)
+csv2catTree(productCatCSVFile)
   .then(catTree => {
     createCategoriesFromTree(catTree)
   })
