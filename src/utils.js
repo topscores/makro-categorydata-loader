@@ -2,6 +2,10 @@ import csv2json from 'csvtojson'
 import 'isomorphic-fetch'
 import { MAKRO_CATEGORIES_MS } from './config'
 
+export const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 // Autogen slug from name_en
 export const autoslug = name_en => {
   return name_en
@@ -11,6 +15,32 @@ export const autoslug = name_en => {
     .replace(/\s\s+/, ' ') // replace multiple spaces with single space
     .replace(/ /g, '-') // replace space with -
     .replace(/_/g, '-') // replace _ with -
+}
+
+// create brand array from csv file
+export const csv2brands = csvFile => {
+  const brands = []
+  return new Promise((resolve, reject) => {
+    csv2json({ noheader: true })
+      .fromFile(csvFile)
+      .on('csv', row => {
+        const brand = {
+          type: 'brand',
+          oldId: row[0],
+          name_th: row[1],
+          name_en: row[2],
+          slug: autoslug(row[2]),
+        }
+        brands.push(brand)
+      })
+      .on('done', error => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(brands)
+        }
+      })
+  })
 }
 
 // create categories tree from csv file
@@ -85,6 +115,11 @@ export const createCategory = category => {
     mode: 'cors',
     body: JSON.stringify(category),
   })
-    .then(response => response.json())
-    .catch(error => console.log(error))
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${JSON.stringify(category)}${response.statusText}`)
+      }
+      return response.json()
+    })
+    .catch(error => Promise.reject(error))
 }
