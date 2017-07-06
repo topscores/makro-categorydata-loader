@@ -17,6 +17,97 @@ export const autoslug = name_en => {
     .replace(/_/g, '-') // replace _ with -
 }
 
+// create catDb obj from csv
+export const csv2catDb = (
+  csvFile,
+  type,
+  parentIdCol, // 99 if this is root cat
+  idCol,
+  nameEnCol,
+  nameThCol
+) => {
+  const catDb = {}
+  return new Promise((resolve, reject) => {
+    csv2json({ noheader: true })
+      .fromFile(csvFile)
+      .on('csv', row => {
+        const cat = {
+          type,
+          oldId: row[idCol],
+          parentOldId: parentIdCol === 99 ? -1 : row[parentIdCol],
+          name_en: row[nameEnCol],
+          name_th: row[nameThCol],
+          slug: autoslug(row[nameEnCol]),
+        }
+        catDb[row[idCol]] = cat
+      })
+      .on('done', error => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(catDb)
+        }
+      })
+  })
+}
+
+export const createCategoriesFromCSV = (
+  csvFile,
+  type,
+  parentIdCol, // 99 if this is root cat
+  idCol,
+  nameEnCol,
+  nameThCol,
+  parentCatDb = null
+) => {
+  return new Promise((resolve, reject) => {
+    csv2catDb(csvFile, type, parentIdCol, idCol, nameEnCol, nameThCol)
+      .then(catDb => {
+        let successCount = 0
+        let mapping = ''
+        let errors = ''
+        let errorCount = 0
+        const catids = Object.keys(catDb)
+        return catids
+          .reduce((promise, catid) => {
+            const tmpcat = catDb[catid]
+            const cat = {
+              ...tmpcat,
+              parent_id:
+                parentCatDb === null
+                  ? null
+                  : parentCatDb[tmpcat.parentOldId].id,
+            }
+            return promise.then(() => {
+              return createCategory(cat)
+                .then(json => {
+                  catDb[catid]['id'] = json.data.id
+                  console.log(`${catid},${json.data.id}`)
+                  mapping += `${catid},${json.data.id}\r\n`
+                  successCount++
+                })
+                .catch(error => {
+                  errors += `${error}\r\n`
+                  errorCount++
+                })
+            })
+          }, sleep(500))
+          .then(() => {
+            const result = {}
+            result.mapping = mapping
+            result.successCount = successCount
+            result.errors = errors
+            result.errorCount = errorCount
+            result.catDb = catDb
+            resolve(result)
+          })
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+}
+
 // create brand array from csv file
 export const csv2brands = csvFile => {
   const brands = []
