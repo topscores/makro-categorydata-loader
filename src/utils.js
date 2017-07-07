@@ -261,3 +261,50 @@ export const getCDNKey = () => {
     .catch(error => Promise.reject(error))
 }
 export const uploadFile = file => {}
+
+export const csv2bindInfo = csvFile => {
+  const bindInfos = []
+  return new Promise((resolve, reject) => {
+    csv2json({ noheader: true })
+      .fromFile(csvFile)
+      .on('csv', row => {
+        const bindInfo = {
+          item_id: row[0],
+          content_id: row[1],
+          old_category_id: row[2],
+          category_id: row[3],
+          content_type: row[4],
+        }
+        bindInfos.push(bindInfo)
+      })
+      .on('done', error => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(bindInfos)
+        }
+      })
+  })
+}
+
+export const addContentToCategory = bindInfo => {
+  if (bindInfo.category_id === '-1') {
+    return Promise.resolve()
+  }
+  return fetch(`${MAKRO_CATEGORIES_MS}/categories/content`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    mode: 'cors',
+    body: JSON.stringify(bindInfo),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${JSON.stringify(bindInfo)}${response.statusText}`)
+      }
+      return response.json()
+    })
+    .catch(error => Promise.reject(error))
+}

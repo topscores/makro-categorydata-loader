@@ -6,7 +6,8 @@
     "load:prodcat": "babel-node src/loadProdcat.js",
     "load:bizcat": "babel-node src/loadBizcat.js",
     "load:brands": "babel-node src/loadBrands.js",
-    "load:images": "babel-node src/loadImages.js",
+    "bindcat": "babel-node src/addContent2Cat.js",
+    "load:all": "yarn load:prodcat && yarn load:bizcat && yarn load:brands",
     "clearlogs": "rm -rf ./logs/*"
   },
   "repository": "git@github.com:topscores/makro-categorydata-loader.git",
