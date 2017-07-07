@@ -41,7 +41,7 @@ createCategoriesFromCSV(
   })
   .then(result1 => {
     return createCategoriesFromCSV(
-      'data/prodcat/bizcat2.csv',
+      'data/bizcat/bizcat2.csv',
       'business',
       1,
       2,

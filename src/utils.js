@@ -1,6 +1,12 @@
 import csv2json from 'csvtojson'
 import 'isomorphic-fetch'
-import { MAKRO_CATEGORIES_MS } from './config'
+import {
+  MAKRO_CATEGORIES_MS,
+  CDN_API_URL,
+  CDN_PRIVATE_KEY,
+  CDN_SERVICE_NAME,
+  CDN_SERVICE_ID,
+} from './config'
 
 export const sleep = ms => {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -214,3 +220,34 @@ export const createCategory = category => {
     })
     .catch(error => Promise.reject(error))
 }
+
+export const encodeKey = (inputkey, length = 8) => {
+  let alphabet =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let encodedKey = ''
+  let key = `${md5(inputkey)}${length}`
+  key = key.substr(0, length)
+  alphabet = `${alphabet}${alphabet}`
+
+  for (let i = 0; i < key.length; i++) {
+    alphabet += alphabet
+    const int_alpha = key.charCodeAt(i)
+    alphabet = alphabet.substr(int_alpha)
+    encodedkey = `${encodedkey}${alphabet.substr(0, 1)}`
+  }
+
+  return $encodedkey
+}
+
+export const getCDNKey = () => {
+  return fetch(`${CDN_API_URL}/apis/getkey?service_id=${CDN_SERVICE_ID}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Cannot get CDN key')
+      }
+      return response.json()
+    })
+    .then(json => json.data.key)
+    .catch(error => Promise.reject(error))
+}
+export const uploadFile = file => {}

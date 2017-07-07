@@ -6,6 +6,7 @@
     "load:prodcat": "babel-node src/loadProdcat.js",
     "load:bizcat": "babel-node src/loadBizcat.js",
     "load:brands": "babel-node src/loadBrands.js",
+    "load:images": "babel-node src/loadImages.js",
     "clearlogs": "rm -rf ./logs/*"
   },
   "repository": "git@github.com:topscores/makro-categorydata-loader.git",
@@ -18,6 +19,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "csvtojson": "^1.1.7",
     "isomorphic-fetch": "^2.2.1",
+    "restler": "^3.4.0",
     "tracer": "^0.8.9"
   }
 }
