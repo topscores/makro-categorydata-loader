@@ -214,6 +214,16 @@ export const createCategory = category => {
   })
     .then(response => {
       if (!response.ok) {
+        if (response.statusText === 'Data is duplicate') {
+          const newCategory = { ...category }
+          newCategory.running =
+            newCategory.running === undefined ? 0 : newCategory.running + 1
+          newCategory.slug = `${autoslug(
+            newCategory.name_en
+          )}${newCategory.running}`
+          console.log(newCategory)
+          return createCategory(newCategory)
+        }
         throw new Error(`${JSON.stringify(category)}${response.statusText}`)
       }
       return response.json()

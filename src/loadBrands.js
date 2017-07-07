@@ -2,7 +2,7 @@ import fs from 'fs'
 import { csv2brands, createCategory, sleep } from './utils'
 
 // Path relative to where yarn is called
-const brandCSVFile = './data/brandsmall.csv'
+const brandCSVFile = './data/brands.csv'
 
 console.log('Start loading brands')
 let mapping = ''
