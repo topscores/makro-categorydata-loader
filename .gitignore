@@ -60,3 +60,5 @@ typings/
 # confidential data
 # data
 
+# IDE specific files
+.idea
