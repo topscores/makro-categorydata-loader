@@ -273,7 +273,7 @@ export const csv2bindInfo = csvFile => {
           content_id: row[1],
           old_category_id: row[2],
           category_id: row[3],
-          content_type: row[4],
+          content_type: 'product',
         }
         bindInfos.push(bindInfo)
       })
