@@ -204,7 +204,10 @@ export const createCategory = category => {
       'Content-Type': 'application/json',
     },
     mode: 'cors',
-    body: JSON.stringify(category),
+    body: JSON.stringify({
+      ...category,
+      import: true,
+    }),
   })
     .then(response => {
       if (!response.ok) {
