@@ -1,5 +1,10 @@
 import fs from 'fs'
-import { csv2bindInfo, addContentToCategory, sleep } from './utils'
+import {
+  csv2bindInfo,
+  addContentToCategory,
+  updateHaveCategoriesStatus,
+  sleep,
+} from './utils'
 
 // Path relative to where yarn is called
 const prodToProdcat = './data/prod-prodcat.csv'
@@ -16,6 +21,10 @@ csv2bindInfo(prodToProdcat)
     return bindInfos.reduce((promise, bindInfo) => {
       return promise.then(() => {
         return addContentToCategory(bindInfo)
+          .then(json => {
+            console.log(json)
+          })
+          .then(() => updateHaveCategoriesStatus(bindInfo))
           .then(json => {
             console.log(json)
             successCount++

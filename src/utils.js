@@ -1,12 +1,6 @@
 import csv2json from 'csvtojson'
 import 'isomorphic-fetch'
-import {
-  MAKRO_CATEGORIES_MS,
-  CDN_API_URL,
-  CDN_PRIVATE_KEY,
-  CDN_SERVICE_NAME,
-  CDN_SERVICE_ID,
-} from './config'
+import { MAKRO_CATEGORIES_MS, MAKRO_PRODUCT2_MS } from './config'
 
 export const sleep = ms => {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -273,6 +267,7 @@ export const csv2bindInfo = csvFile => {
           content_id: row[1],
           old_category_id: row[2],
           category_id: row[3],
+          categories_type: row[4],
           content_type: 'product',
         }
         bindInfos.push(bindInfo)
@@ -299,6 +294,28 @@ export const addContentToCategory = bindInfo => {
     },
     mode: 'cors',
     body: JSON.stringify(bindInfo),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${JSON.stringify(bindInfo)}${response.statusText}`)
+      }
+      return response.json()
+    })
+    .catch(error => Promise.reject(error))
+}
+
+export const updateHaveCategoriesStatus = bindInfo => {
+  if (bindInfo.category_id === '-1' || bindInfo.categories_type === 'brand') {
+    return Promise.resolve()
+  }
+  return fetch(`${MAKRO_PRODUCT2_MS}/products/${bindInfo.content_id}`, {
+    method: 'put',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    mode: 'cors',
+    body: JSON.stringify({ have_categories: 'Y' }),
   })
     .then(response => {
       if (!response.ok) {
