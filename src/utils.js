@@ -206,6 +206,7 @@ export const createCategory = category => {
     mode: 'cors',
     body: JSON.stringify({
       ...category,
+      status: 'inactive',
       import: true,
     }),
   })
