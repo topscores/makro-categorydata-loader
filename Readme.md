@@ -3,7 +3,7 @@
 2. Open [xls/makro-master.xlsm](xls/makro-master.xlsm) and goto *prod-mongo* sheet. Click menu [Data]->[From Text] and browse file from step 1.
 # Load master data
 Execute commands in following steps:
-0. truncate all category ms db with commands in truncate.sql
+truncate all category ms db with commands in truncate.sql then 
 1. `yarn` to install dependencies
 2. `yarn load:all` to load all master data
 3. After running step 1 and 2, you should get prodcat-mapping.txt, bizcat-mapping.txt and brand-mapping.txt in your logs directory.
